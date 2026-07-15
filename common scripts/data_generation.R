@@ -2,6 +2,7 @@
 #
 #  generating data from the bernouilli lognormal mixture
 #  
+#  V0.6 July / 2026
 #
 ######################################
 

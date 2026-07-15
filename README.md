@@ -18,6 +18,8 @@ Bayesian estimation (MCMC) implemented in both **JAGS** and **STAN**.
 An online application allowing reproduction of the analyses is available here:
 https://lavoue.shinyapps.io/Mixture_app_STAN/
 
+Note : as of july 2026, not all calculus implemented in the Web app are available here
+
 ## Citation
 
 If you use this code, please cite the paper above.

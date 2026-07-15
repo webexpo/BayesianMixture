@@ -3,7 +3,7 @@
 #   results functions for the MIXT / CENS models
 #
 #    V0.5 Sept / 2019
-#
+#    V0.6 July / 2026 partial implemeentation of web app scripts (no graphs / posterior predictive checks)
 #
 #######################################################
 

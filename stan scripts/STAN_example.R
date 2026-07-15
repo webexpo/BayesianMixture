@@ -2,17 +2,17 @@
 #
 #  Example to run the STAN models for the bernouilli lognormal  and censored models
 #  
-#
+#  V0.6 July 2026
 #
 ##############################################################################
 
-###############
+# 1. Libraries and functions --------------------------------------------------------
 
 
 library(LaplacesDemon)
 library(rstan)
-library(bayesplot)
-library(ggplot2)
+#library(bayesplot)
+#library(ggplot2)
 library(coda)
 library(loo)
 
@@ -30,10 +30,10 @@ source("stan scripts/STAN functions.R")
 
 stanmodel.cens 
 stanmodel.mixt
-stanmodel.trunc
 
 
-###############  DATA GENERATION 
+
+# 2. DATA GENERATION -------------------------------------------------------- 
 
     data0 <- fun.create.data.singleLOD(   prop.true.zero=0.3 ,   # proportion of true zeroes (omega)
                                           n=100,                  # total sample size
@@ -43,17 +43,9 @@ stanmodel.trunc
     )
 
 
-###############################  generating posteriors
-    
-    
-    post.trunc <- fun.stan.trunc( data_sample = data0 , n.iter = 5000 , n.warmup = 2500 , n.chain = 4 ) 
-      
-    post.mixt <- fun.stan.mix( data_sample = data0 , n.iter = 5000 , n.warmup = 2500 , n.chain = 4 )  
-
-    post.trunc.2 <- fun.stan.cens( data_sample = data0 , n.iter = 5000 , n.warmup = 2500 , n.chain = 4 )  
     
   
-#### bayesian analysis
+# 3. Bayesian analysis --------------------------------------------------------
 
 
 mixture.analysis <- stan_bayes.mixt( data.sample = data0 , n.iter = 4000 , n.warmup = 2000 , mymodel=stanmodel.mixt)
@@ -65,48 +57,25 @@ censored.analysis <- stan_bayes.cens( data.sample = data0 , n.iter = 4000 , n.wa
 object.size(censored.analysis)
 
 
-####  point estimates and confidence intervals in a table
+# 4. Point estimates and confidence intervals in a table -----------------------------------------------
 
 
-tab.res <- estimates( mixture.analysis = mixture.analysis, censored.analysis =  censored.analysis , conf = 89)
+tab.res <- estimates( mixture.analysis = mixture.analysis, censored.analysis =  censored.analysis , conf = 90)
 
-tab.res <- othermetrics( mixture.analysis = mixture.analysis, censored.analysis =  censored.analysis , conf = 89 , oel=100 , target_perc = 95/100)
-
-
+tab.res <- othermetrics( mixture.analysis = mixture.analysis, censored.analysis =  censored.analysis , conf = 90 , oel=100 , target_perc = 95/100)
 
 
 
-####  Odds of the mixture model being better than the censored model
+
+
+# 5.  Odds of the mixture model being better than the censored model -----------------------------------------------
 
 GOF <- goodness.of.fit( mixture.analysis = mixture.analysis, censored.analysis =  censored.analysis )
 
 
-###### the MCMC chains
+# 6. the MCMC chains ------------------------------------------------
 
 chains <- posterior.chains( mixture.analysis = mixture.analysis, censored.analysis =  censored.analysis  ) 
   
 
 
-#### posterior predictive comparison of the censored and mixture models
-
-
-pp.graph <- posterior.pred.graphs( post.results = chains , nrep = 5 , data0 = data0 ) 
-
-pp.graph$p.mix
-pp.graph$p.cens
-
-
-#################################################### posterion predictions - quantties
-
-pp.quant <- posterior.pred.quant( post.results  = chains, 
-                                  nrep = 500 , data0 = data0 , 
-                                  type = "propcens" )
-pp.quant$p.mix  
-pp.quant$p.cens  
-
-
-pp.quant <- posterior.pred.quant( post.results  = chains, 
-                                  nrep = 500 , data0 = data0 , 
-                                  type = "p95" )
-pp.quant$p.mix  
-pp.quant$p.cens  

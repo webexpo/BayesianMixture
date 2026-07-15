@@ -2,7 +2,8 @@
 #
 #    Function generating chains for the STAN MODELs for one dataset
 #    
-#
+#    V0.6 July / 2026
+#  
 ###########################################################################################
 
 
