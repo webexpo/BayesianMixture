@@ -255,6 +255,7 @@ othermetrics <- function( mixture.analysis , censored.analysis , conf , oel , ta
 }
 
 
+
 ##############  Minor secondary functions
 
 
@@ -276,3 +277,60 @@ perc.mixt.chain <- function( mu.chain , sigma.chain , omega.chain , target_perc 
   
 }
 
+
+
+perc.cens.chain <- function( mu.chain , sigma.chain , target_perc = 0.5 , conf) {
+  
+  
+  chain <-exp(mu.chain + qnorm(target_perc)*sigma.chain)
+  
+  return(as.numeric(chain))
+  
+  
+}
+
+
+frac.mixt.chain <- function( mu.chain , sigma.chain , omega.chain ,  conf , c.oel) {
+  
+  
+  chain <-100*(1-pnorm((log((c.oel))-mu.chain)/sigma.chain))
+  
+  chain <- chain*(1-omega.chain)
+  
+   return(as.numeric(chain))
+  
+  
+}
+
+frac.cens.chain <- function( mu.chain , sigma.chain , conf , c.oel) {
+  
+  
+  chain <-100*(1-pnorm((log((c.oel))-mu.chain)/sigma.chain))
+  
+  return(as.numeric(chain))
+  
+  
+}
+
+am.mixt.chain <- function( mu.chain , sigma.chain , omega.chain ,  conf ) {
+  
+  
+  chain <- exp(mu.chain + 0.5*sigma.chain^2)
+  
+  chain <- chain*(1-omega.chain)
+
+  return(as.numeric(chain))
+  
+  
+}
+
+
+am.cens.chain <- function( mu.chain , sigma.chain , conf ) {
+  
+  
+  chain <- exp( mu.chain + 0.5*sigma.chain^2)
+  
+  return(as.numeric(chain))
+  
+  
+}
